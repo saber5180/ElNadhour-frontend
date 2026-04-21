@@ -5,6 +5,9 @@ function currentHostname() {
   return window.location.hostname;
 }
 
+/** Paramètres embed YouTube : pas de mute=1 (sinon aucun son). playsinline = mobile. */
+const YOUTUBE_EMBED_QUERY = 'autoplay=1&mute=0&rel=0&playsinline=1';
+
 /** Twitch exige que `parent` = domaine de la page qui affiche l’iframe (spectateur), pas celui de l’admin. */
 function twitchEmbedForChannel(channel) {
   const host = currentHostname();
@@ -35,6 +38,22 @@ export const convertToEmbedUrl = (url) => {
     }
   }
 
+  // YouTube déjà en /embed/ (souvent sauvé depuis l’admin avec mute=1) : réécrire pour activer le son
+  if (trimmedUrl.includes('youtube.com/embed/')) {
+    try {
+      const u = new URL(trimmedUrl);
+      const id = u.pathname.match(/\/embed\/([^/?]+)/)?.[1];
+      if (id) {
+        const cleanId = id.replace(/[^a-zA-Z0-9_-]/g, '');
+        if (cleanId) {
+          return `https://www.youtube.com/embed/${cleanId}?${YOUTUBE_EMBED_QUERY}`;
+        }
+      }
+    } catch (_) {
+      /* ignore */
+    }
+  }
+
   // YouTube : /watch, youtu.be, /live/, /embed/
   if (trimmedUrl.includes('youtube.com/live/')) {
     const videoId = trimmedUrl
@@ -43,7 +62,7 @@ export const convertToEmbedUrl = (url) => {
       ?.split('/')[0]
       ?.replace(/[^a-zA-Z0-9_-]/g, '');
     if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
+      return `https://www.youtube.com/embed/${videoId}?${YOUTUBE_EMBED_QUERY}`;
     }
   }
 
@@ -57,7 +76,7 @@ export const convertToEmbedUrl = (url) => {
     }
 
     if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
+      return `https://www.youtube.com/embed/${videoId}?${YOUTUBE_EMBED_QUERY}`;
     }
   }
 

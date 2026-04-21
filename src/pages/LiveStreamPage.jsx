@@ -151,7 +151,7 @@ const LiveStreamPage = () => {
                     src={iframeSrc}
                     className="h-full w-full border-0"
                     allowFullScreen
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share"
                     title={`${getStreamPlatform(stream.stream_url)} Live Stream`}
                     loading="eager"
                     referrerPolicy="strict-origin-when-cross-origin"
@@ -202,7 +202,7 @@ const LiveStreamPage = () => {
                 </div>
                 {iframeSrc && getStreamPlatform(stream.stream_url) === 'youtube' && (
                   <p className="mt-3 text-xs text-gray-500">
-                    La lecture auto démarre souvent <strong>muette</strong> — cliquez sur l’icône volume dans le lecteur YouTube pour activer le son.
+                    Si vous n’entendez rien, certains navigateurs bloquent le son jusqu’à une interaction : cliquez une fois dans le lecteur YouTube puis sur l’icône volume.
                   </p>
                 )}
               </div>
