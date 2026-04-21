@@ -4,7 +4,6 @@ import { useQuery } from 'react-query';
 import { ArrowRight, Star, Coffee, Utensils, Clock, Phone, MapPin, Award } from 'lucide-react';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import LivePopup from '../components/LivePopup';
 import HeroBackground from '../components/HeroBackground';
 import { mediaUrl } from '../utils/mediaUrl';
 
@@ -47,8 +46,6 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* Live Stream Popup */}
-      <LivePopup />
       {/* Hero Section - Clean & Modern */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cafe-50 to-cafe-100">
         <HeroBackground />

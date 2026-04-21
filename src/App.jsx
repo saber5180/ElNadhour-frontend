@@ -25,6 +25,7 @@ import HeroImagesManager from './pages/admin/HeroImagesManager';
 
 // Loading component
 import LoadingSpinner from './components/LoadingSpinner';
+import LivePopup from './components/LivePopup';
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -39,6 +40,8 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
+    <>
+      <LivePopup />
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<Layout />}>
@@ -71,6 +74,7 @@ function App() {
       {/* Catch all route */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
 

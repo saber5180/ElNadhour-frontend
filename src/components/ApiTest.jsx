@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { formatPriceEUR } from '../utils/formatPrice';
+import { formatPriceDT } from '../utils/formatPrice';
 
 const ApiTest = () => {
   const [apiStatus, setApiStatus] = useState('Testing...');
@@ -66,7 +66,7 @@ const ApiTest = () => {
           <strong>Menu Items ({menuItems.length}):</strong>
           <ul className="list-disc list-inside ml-4 mt-2">
             {menuItems.slice(0, 5).map(item => (
-              <li key={item.id}>{item.name} - {formatPriceEUR(item.price)}</li>
+              <li key={item.id}>{item.name} - {formatPriceDT(item.price)}</li>
             ))}
           </ul>
         </div>

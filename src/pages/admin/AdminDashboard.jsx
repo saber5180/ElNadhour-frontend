@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { mediaUrl } from '../../utils/mediaUrl';
-import { formatPriceEUR } from '../../utils/formatPrice';
+import { formatPriceDT } from '../../utils/formatPrice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import LiveStreamManager from '../../components/admin/LiveStreamManager';
 
@@ -97,7 +97,7 @@ const AdminDashboard = () => {
           Tableau de bord
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-cafe-700 md:text-base">
-          Gérez le menu, les médias et le live. Les prix affichés côté site sont en <strong>euros (€)</strong>.
+          Gérez le menu, les médias et le live.
         </p>
       </div>
 
@@ -194,7 +194,7 @@ const AdminDashboard = () => {
                     <p className="truncate text-sm text-cafe-600">{item.category_name}</p>
                   </div>
                   <p className="shrink-0 text-sm font-semibold tabular-nums text-cafe-800">
-                    {formatPriceEUR(item.price)}
+                    {formatPriceDT(item.price)}
                   </p>
                 </div>
               ))}

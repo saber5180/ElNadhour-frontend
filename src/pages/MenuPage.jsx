@@ -6,7 +6,7 @@ import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MenuItemDescription from '../components/MenuItemDescription';
 import { mediaUrl } from '../utils/mediaUrl';
-import { formatPriceEUR } from '../utils/formatPrice';
+import { formatPriceDT } from '../utils/formatPrice';
 
 const MenuPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -125,7 +125,7 @@ const MenuPage = () => {
                           {item.name}
                         </h3>
                         <span className="text-lg font-bold text-cafe-700">
-                          {formatPriceEUR(item.price)}
+                          {formatPriceDT(item.price)}
                         </span>
                       </div>
                       <p className="text-cafe-600 text-sm mb-2">

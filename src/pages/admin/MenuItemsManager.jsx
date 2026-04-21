@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { mediaUrl } from '../../utils/mediaUrl';
-import { formatPriceEUR } from '../../utils/formatPrice';
+import { formatPriceDT } from '../../utils/formatPrice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 const MenuItemsManager = () => {
@@ -246,7 +246,7 @@ const MenuItemsManager = () => {
                       Carte
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Prix
+                      Prix (DT)
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Créé le
@@ -293,7 +293,7 @@ const MenuItemsManager = () => {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-cafe-700">
-                        {formatPriceEUR(item.price)}
+                        {formatPriceDT(item.price)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(item.created_at).toLocaleDateString('fr-FR')}
@@ -410,7 +410,7 @@ const MenuItemsManager = () => {
 
                       {/* Price Field */}
                       <div>
-                        <label className="form-label">Prix (€)</label>
+                        <label className="form-label">Prix (DT)</label>
                         <input
                           type="number"
                           step="0.01"

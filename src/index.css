@@ -60,6 +60,39 @@
   .glass-effect {
     @apply backdrop-blur-sm bg-white/80 border border-white/20;
   }
+
+  /* Notre Menu : dégradé café qui défile (transform = fiable partout) */
+  .menu-hero-gradient-slide {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+      95deg,
+      #164550 0%,
+      #1f5a6b 14%,
+      #2d6a62 28%,
+      #3d756b 42%,
+      #4d8f85 52%,
+      #5a9d91 58%,
+      #4d8f85 68%,
+      #3d756b 78%,
+      #1f5a6b 88%,
+      #164550 100%
+    );
+    animation: menu-hero-slide-x 22s linear infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes menu-hero-slide-x {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 @layer utilities {

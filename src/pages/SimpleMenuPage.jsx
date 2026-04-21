@@ -6,7 +6,7 @@ import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MenuItemDescription from '../components/MenuItemDescription';
 import { mediaUrl } from '../utils/mediaUrl';
-import { formatPriceEUR } from '../utils/formatPrice';
+import { formatPriceDT } from '../utils/formatPrice';
 
 const STICKY_TOP = 'top-16 md:top-[4.25rem]';
 
@@ -176,7 +176,7 @@ const SimpleMenuPage = () => {
                         </div>
                         <div className="shrink-0 rounded-md bg-cafe-700 px-3 py-1.5 text-white self-start">
                           <span className="text-base font-bold md:text-lg">
-                            {formatPriceEUR(item.price)}
+                            {formatPriceDT(item.price)}
                           </span>
                         </div>
                       </div>
@@ -203,10 +203,13 @@ const SimpleMenuPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-cafe-50 via-white to-cafe-100">
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cafe-700 to-cafe-600" />
+        {/* Dégradé café animé : bande 200% + translate (CSS global, plus fiable que background-position) */}
+        <div className="absolute inset-0 overflow-hidden" aria-hidden>
+          <div className="menu-hero-gradient-slide" />
+        </div>
         <div className="relative max-w-7xl mx-auto px-4 py-10 md:py-12 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/80 backdrop-blur-sm rounded-full mb-4">
-            <img src="/icon.png" alt="El Nadhour" className="h-10 w-10" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white/80 backdrop-blur-sm rounded-full mb-4">
+            <img src="/icon.png" alt="El Nadhour" className="h-20 w-20" />
           </div>
           <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-3">Notre Menu</h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-6">
@@ -222,9 +225,6 @@ const SimpleMenuPage = () => {
               className="w-full pl-12 pr-4 py-3 rounded-full border-0 shadow-lg focus:ring-4 focus:ring-white/30 focus:outline-none text-cafe-900"
             />
           </div>
-          <p className="mt-3 text-center text-xs text-white/80">
-            Prix affichés en <strong>euros (€)</strong> — TTC indicatif.
-          </p>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-cafe-50 to-transparent" />
       </div>

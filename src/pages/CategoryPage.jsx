@@ -6,7 +6,7 @@ import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MenuItemDescription from '../components/MenuItemDescription';
 import { mediaUrl } from '../utils/mediaUrl';
-import { formatPriceEUR } from '../utils/formatPrice';
+import { formatPriceDT } from '../utils/formatPrice';
 
 const CategoryPage = () => {
   const { id } = useParams();
@@ -106,7 +106,7 @@ const CategoryPage = () => {
                   {/* Price Badge */}
                   <div className="absolute top-4 right-4 bg-white bg-opacity-95 backdrop-blur-sm px-3 py-1 rounded-full">
                     <span className="text-cafe-900 font-bold text-lg">
-                      {formatPriceEUR(item.price)}
+                      {formatPriceDT(item.price)}
                     </span>
                   </div>
                 </div>
