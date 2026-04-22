@@ -90,14 +90,14 @@ const HomePage = () => {
             {/* Quick Actions */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <a 
-                href="tel:+33123456789"
+                href="#contact-section"
                 className="inline-flex items-center justify-center bg-white hover:bg-gray-50 text-cafe-700 font-semibold px-6 md:px-8 py-3 md:py-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
               >
                 <Phone className="h-5 w-5 mr-2" />
-                Nous Appeler
+                Nous contacter
               </a>
-              <a 
-                href="https://maps.google.com"
+              <a
+                href="https://maps.app.goo.gl/b5PdvFyRr2yQjXXD9"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center bg-white hover:bg-gray-50 text-cafe-700 font-semibold px-6 md:px-8 py-3 md:py-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
@@ -122,27 +122,37 @@ const HomePage = () => {
               <LoadingSpinner text="Chargement des spécialités..." />
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
               {categories?.map((category) => (
                 <Link
                   key={category.id}
                   to={`/carte?cat=${category.id}`}
-                  className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
+                  className="group overflow-hidden rounded-2xl border border-cafe-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-cafe-300 hover:shadow-lg"
                 >
-                  <div className="relative overflow-hidden">
+                  <div className="relative h-52 overflow-hidden bg-cafe-100">
                     <img
                       src={mediaUrl(category.image_url) || '/placeholder-category.svg'}
                       alt={category.name}
-                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       onError={(e) => {
                         e.target.src = '/placeholder-category.svg';
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent group-hover:from-black/40 transition-all duration-300"></div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-white font-bold text-lg text-center">
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-cafe-900/45 via-cafe-900/10 to-transparent" />
+                    <span className="absolute left-4 top-4 rounded-full border border-white/50 bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-cafe-800 backdrop-blur-sm">
+                      Spécialité
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 px-5 py-4">
+                    <div className="min-w-0">
+                      <h3 className="truncate font-display text-2xl font-bold text-cafe-900">
                         {category.name}
                       </h3>
+                      <p className="mt-1 text-sm text-cafe-600">Voir les articles de cette catégorie</p>
+                    </div>
+                    <div className="shrink-0 rounded-full border border-cafe-200 bg-cafe-50 p-2.5 text-cafe-700 transition-colors group-hover:border-cafe-300 group-hover:bg-cafe-100 group-hover:text-cafe-900">
+                      <ArrowRight className="h-4.5 w-4.5" />
                     </div>
                   </div>
                 </Link>
@@ -164,7 +174,7 @@ const HomePage = () => {
       </section>
 
       {/* Info Section */}
-      <section className="py-20 bg-cafe-50">
+      <section id="contact-section" className="py-20 bg-cafe-50">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Hours */}

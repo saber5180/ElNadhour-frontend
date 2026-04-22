@@ -137,7 +137,7 @@ const SimpleMenuPage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:items-stretch">
+            <div className="grid grid-cols-1 gap-3 lg:items-stretch">
               {items.map((item) => (
                 <article
                   key={item.id}
