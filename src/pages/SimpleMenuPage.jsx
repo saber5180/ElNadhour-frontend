@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { Search, Coffee, Star, Clock } from 'lucide-react';
+import { Search, Coffee, Star, Clock, X } from 'lucide-react';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MenuItemDescription from '../components/MenuItemDescription';
@@ -18,6 +18,7 @@ const SimpleMenuPage = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState(initialCat);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const { data: categories, isLoading: categoriesLoading } = useQuery(
     'categories',
@@ -77,6 +78,16 @@ const SimpleMenuPage = () => {
     const id = window.requestAnimationFrame(run);
     return () => window.cancelAnimationFrame(id);
   }, [activeCategory, isLoading]);
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setImagePreview(null);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   const filteredItems =
     menuItems?.filter((item) => {
@@ -138,10 +149,46 @@ const SimpleMenuPage = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-3 lg:items-stretch">
-              {items.map((item) => (
+              {items.map((item) => {
+                const hasPromo =
+                  Boolean(item.promotion_text?.trim()) || item.promotion_price != null;
+                const hasNew = Boolean(item.is_new);
+
+                const articleBase =
+                  'group flex h-full min-h-[200px] cursor-pointer flex-col overflow-hidden rounded-xl border shadow-md transition-all hover:shadow-lg md:min-h-[220px]';
+
+                let articleVariant;
+                if (hasPromo) {
+                  articleVariant =
+                    'promo-glow-border border-amber-300/80 bg-gradient-to-br from-amber-50/95 via-white to-orange-50/45 shadow-[0_0_0_1px_rgba(251,191,36,0.4),0_10px_24px_rgba(217,119,6,0.2)] hover:shadow-[0_0_0_1px_rgba(251,191,36,0.55),0_14px_30px_rgba(217,119,6,0.28)]';
+                } else if (hasNew) {
+                  articleVariant =
+                    'border-emerald-200/70 bg-gradient-to-br from-emerald-50/95 via-white to-teal-50/35 hover:shadow-xl';
+                } else {
+                  articleVariant = 'border-cafe-200/60 bg-white/95';
+                }
+
+                return (
                 <article
                   key={item.id}
-                  className="group flex h-full min-h-[200px] flex-col overflow-hidden rounded-xl border border-cafe-200/60 bg-white/95 shadow-md transition-shadow hover:shadow-lg md:min-h-[220px]"
+                  className={`${articleBase} ${articleVariant}`}
+                  onClick={() =>
+                    setImagePreview({
+                      src: mediaUrl(item.image_url) || '/placeholder-food.svg',
+                      title: item.name,
+                    })
+                  }
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      setImagePreview({
+                        src: mediaUrl(item.image_url) || '/placeholder-food.svg',
+                        title: item.name,
+                      });
+                    }
+                  }}
                 >
                   <div className="flex min-h-0 flex-1 flex-col md:flex-row md:items-stretch">
                     <div className="relative h-36 w-full shrink-0 overflow-hidden bg-cafe-100 md:h-auto md:w-44 md:min-h-[11rem]">
@@ -155,6 +202,13 @@ const SimpleMenuPage = () => {
                         }}
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 to-transparent" />
+                      {item.is_new && (
+                        <div className="absolute right-0 top-0 z-10 h-16 w-16 overflow-hidden">
+                          <div className="absolute -right-8 top-3 w-28 rotate-45 bg-gradient-to-b from-red-500 to-red-700 py-1 text-center text-[10px] font-extrabold uppercase tracking-[0.14em] text-white shadow-md">
+                            Nouveau
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex min-h-0 min-w-0 flex-1 flex-col p-4">
@@ -174,10 +228,41 @@ const SimpleMenuPage = () => {
                             )}
                           </div>
                         </div>
-                        <div className="shrink-0 rounded-md bg-cafe-700 px-3 py-1.5 text-white self-start">
-                          <span className="text-base font-bold md:text-lg">
-                            {formatPriceDT(item.price)}
-                          </span>
+                        <div className="flex shrink-0 flex-col items-end gap-1.5 self-start">
+                          <div
+                            className={
+                              item.promotion_price
+                                ? 'rounded-md bg-cafe-700 py-1.5 pl-2 pr-3 text-right text-white shadow-sm'
+                                : 'rounded-md bg-cafe-700 px-3 py-1.5 text-white'
+                            }
+                          >
+                            {item.promotion_price ? (
+                              <div className="flex items-stretch justify-end gap-2.5 leading-tight">
+                                <span
+                                  className="w-0.5 shrink-0 self-stretch rounded-full bg-amber-400"
+                                  aria-hidden
+                                />
+                                <div className="min-w-0 text-right">
+                                  <div className="text-[11px] text-white/65 line-through">
+                                    {formatPriceDT(item.price)}
+                                  </div>
+                                  <span className="text-base font-bold md:text-lg">
+                                    {formatPriceDT(item.promotion_price)}
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <span className="text-base font-bold md:text-lg">
+                                {formatPriceDT(item.price)}
+                              </span>
+                            )}
+                          </div>
+                          {item.promotion_text && (
+                            <span className="relative inline-flex items-center overflow-hidden rounded-md border border-amber-300/70 bg-gradient-to-r from-amber-200 via-amber-100 to-amber-50 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-amber-950 shadow-[0_0_0_1px_rgba(251,191,36,0.2),0_6px_14px_rgba(217,119,6,0.22)]">
+                              <span className="pointer-events-none absolute inset-y-0 -left-8 w-6 rotate-12 bg-white/70 blur-[1px]" />
+                              <span className="relative">Offre</span>
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -189,11 +274,27 @@ const SimpleMenuPage = () => {
                         ) : (
                           <div className="flex-1" aria-hidden />
                         )}
+                        {item.promotion_text && (
+                          <div className="mt-2 rounded-lg border border-amber-200/80 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 px-3 py-2.5 shadow-sm">
+                            <div className="flex items-start gap-2">
+                              <span className="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-amber-500 shadow-[0_0_0_4px_rgba(251,191,36,0.15)]" />
+                              <div className="min-w-0">
+                                <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-amber-800">
+                                  Offre spéciale
+                                </p>
+                                <p className="mt-0.5 text-xs font-medium leading-relaxed text-amber-900">
+                                  {item.promotion_text}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
           </div>
         ))}
@@ -226,7 +327,7 @@ const SimpleMenuPage = () => {
             />
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-cafe-50 to-transparent" />
+        
       </div>
 
       <div
@@ -256,6 +357,43 @@ const SimpleMenuPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-4 md:py-10">{menuBody}</div>
+
+      {imagePreview && (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          onClick={() => setImagePreview(null)}
+          role="presentation"
+        >
+          <div
+            className="relative inline-flex max-h-[90vh] max-w-[95vw] items-end justify-center"
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Aperçu image de ${imagePreview.title}`}
+          >
+            <button
+              type="button"
+              onClick={() => setImagePreview(null)}
+              className="absolute right-3 top-3 z-10 rounded-full bg-black/70 p-2 text-white transition-colors hover:bg-black"
+              aria-label="Fermer l'aperçu"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <img
+              src={imagePreview.src}
+              alt={imagePreview.title}
+              className="max-h-[90vh] max-w-[95vw] rounded-2xl object-contain shadow-2xl"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = '/placeholder-food.svg';
+              }}
+            />
+            <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-black/55 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm">
+              {imagePreview.title}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

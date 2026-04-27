@@ -11,7 +11,9 @@ import {
   Upload,
   Search,
   Filter,
-  Star
+  Star,
+  Sparkles,
+  BadgePercent
 } from 'lucide-react';
 import api from '../../services/api';
 import { mediaUrl } from '../../utils/mediaUrl';
@@ -114,6 +116,9 @@ const MenuItemsManager = () => {
         category_id: item.category_id,
         image_url: item.image_url || '',
         is_recommended: Boolean(item.is_recommended),
+        is_new: Boolean(item.is_new),
+        promotion_text: item.promotion_text || '',
+        promotion_price: item.promotion_price ?? '',
       });
     } else {
       reset({
@@ -123,6 +128,9 @@ const MenuItemsManager = () => {
         category_id: '',
         image_url: '',
         is_recommended: false,
+        is_new: false,
+        promotion_text: '',
+        promotion_price: '',
       });
     }
   };
@@ -154,6 +162,9 @@ const MenuItemsManager = () => {
     formData.append('price', parseFloat(data.price));
     formData.append('category_id', parseInt(data.category_id));
     formData.append('is_recommended', data.is_recommended ? '1' : '0');
+    formData.append('is_new', data.is_new ? '1' : '0');
+    formData.append('promotion_text', data.promotion_text || '');
+    formData.append('promotion_price', data.promotion_price ? parseFloat(data.promotion_price) : '');
 
     if (selectedFile) {
       formData.append('image', selectedFile);
@@ -283,17 +294,41 @@ const MenuItemsManager = () => {
                         {item.category_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {item.is_recommended ? (
-                          <span className="inline-flex items-center gap-1 text-amber-700" title="Mis en avant sur la carte">
-                            <Star className="h-4 w-4 fill-current shrink-0" />
-                            Oui
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">—</span>
-                        )}
+                        <div className="flex flex-wrap items-center gap-2">
+                          {item.is_recommended && (
+                            <span className="inline-flex items-center gap-1 text-amber-700" title="Mis en avant sur la carte">
+                              <Star className="h-4 w-4 fill-current shrink-0" />
+                              Reco
+                            </span>
+                          )}
+                          {item.is_new && (
+                            <span className="inline-flex items-center gap-1 text-emerald-700" title="Nouveau produit">
+                              <Sparkles className="h-4 w-4 shrink-0" />
+                              Nouveau
+                            </span>
+                          )}
+                          {item.promotion_text && (
+                            <span className="inline-flex items-center gap-1 text-rose-700" title={item.promotion_text}>
+                              <BadgePercent className="h-4 w-4 shrink-0" />
+                              Promo
+                            </span>
+                          )}
+                          {!item.is_recommended && !item.is_new && !item.promotion_text && (
+                            <span className="text-gray-400">—</span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-cafe-700">
-                        {formatPriceDT(item.price)}
+                        <div className="flex flex-col">
+                          {item.promotion_price ? (
+                            <>
+                              <span className="text-xs font-medium text-gray-400 line-through">{formatPriceDT(item.price)}</span>
+                              <span className="text-rose-700">{formatPriceDT(item.promotion_price)}</span>
+                            </>
+                          ) : (
+                            <span>{formatPriceDT(item.price)}</span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(item.created_at).toLocaleDateString('fr-FR')}
@@ -408,6 +443,21 @@ const MenuItemsManager = () => {
                         </label>
                       </div>
 
+                      <div className="flex items-start gap-3 rounded-lg border border-emerald-100 bg-emerald-50/50 px-3 py-3">
+                        <input
+                          id="is_new"
+                          type="checkbox"
+                          className="mt-0.5 h-4 w-4 rounded border-gray-300 text-emerald-700 focus:ring-emerald-500"
+                          {...register('is_new')}
+                        />
+                        <label htmlFor="is_new" className="cursor-pointer text-sm leading-snug text-gray-700">
+                          <span className="font-medium text-gray-900">Nouveau</span>
+                          <span className="mt-0.5 block text-gray-500">
+                            Affiche un badge "Nouveau" sur le produit côté client.
+                          </span>
+                        </label>
+                      </div>
+
                       {/* Price Field */}
                       <div>
                         <label className="form-label">Prix (DT)</label>
@@ -427,6 +477,36 @@ const MenuItemsManager = () => {
                         />
                         {errors.price && (
                           <p className="mt-1 text-sm text-red-600">{errors.price.message}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="form-label">Promotion (texte)</label>
+                        <input
+                          type="text"
+                          className="form-input"
+                          placeholder="ex: -20% cette semaine"
+                          {...register('promotion_text')}
+                        />
+                      </div>
+
+                      <div>
+                        <label className="form-label">Prix promo (DT)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          className={`form-input ${errors.promotion_price ? 'border-red-500' : ''}`}
+                          placeholder="Optionnel"
+                          {...register('promotion_price', {
+                            min: {
+                              value: 0,
+                              message: 'Le prix promo doit être positif',
+                            },
+                          })}
+                        />
+                        {errors.promotion_price && (
+                          <p className="mt-1 text-sm text-red-600">{errors.promotion_price.message}</p>
                         )}
                       </div>
 
