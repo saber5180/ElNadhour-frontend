@@ -45,13 +45,8 @@ export default {
         'slide-up': 'slideUp 0.3s ease-out',
         'scale-in': 'scaleIn 0.2s ease-out',
         'hero-marquee': 'heroMarquee 55s linear infinite',
-        'live-popup-in': 'livePopupIn 0.3s ease-out',
       },
       keyframes: {
-        livePopupIn: {
-          '0%': { opacity: '0', transform: 'translateX(100%)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' },
-        },
         heroMarquee: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },

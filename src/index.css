@@ -6,13 +6,18 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     @apply text-gray-900 bg-gray-50;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+  }
+
+  ::selection {
+    background-color: rgba(31, 90, 107, 0.22);
+    color: #0f2529;
   }
 }
 
@@ -149,21 +154,26 @@
   z-index: -1;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar — discreet, dégradé café */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-cafe-100;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-cafe-400 rounded;
+  background: linear-gradient(180deg, rgba(31, 90, 107, 0.25), rgba(77, 143, 133, 0.35));
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-cafe-500;
+  background: linear-gradient(180deg, rgba(31, 90, 107, 0.45), rgba(77, 143, 133, 0.55));
+  background-clip: padding-box;
 }
 
 /* Loading spinner */
@@ -179,4 +189,251 @@
 .image-hover-effect:hover {
   transform: scale(1.05);
   filter: brightness(1.1);
+}
+
+/* ============================================================
+   PREMIUM POLISH — El Nadhour
+   Halos lumineux, entrées cinématiques, révélations au scroll
+   ============================================================ */
+
+/* Splash Screen */
+@keyframes nd-splash-fade {
+  0%, 75% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; }
+}
+@keyframes nd-splash-logo {
+  0% { transform: scale(0.9); opacity: 0; }
+  20% { transform: scale(1); opacity: 1; }
+  80% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+@keyframes nd-splash-progress {
+  0% { width: 0%; }
+  75% { width: 100%; }
+  100% { width: 100%; }
+}
+.nd-splash {
+  animation: nd-splash-fade 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.nd-splash-logo {
+  animation: nd-splash-logo 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.nd-splash-progress {
+  animation: nd-splash-progress 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Entrée hero — montée progressive avec léger blur de focus */
+@keyframes nd-hero-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(8px);
+  }
+  60% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.nd-hero-rise {
+  opacity: 0;
+  animation: nd-hero-rise 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.nd-delay-1 { animation-delay: 1.8s; }
+.nd-delay-2 { animation-delay: 1.95s; }
+.nd-delay-3 { animation-delay: 2.1s; }
+.nd-delay-4 { animation-delay: 2.25s; }
+.nd-delay-5 { animation-delay: 2.4s; }
+
+/* Halos lumineux flottants — donne de la profondeur au hero */
+@keyframes nd-orb-drift-1 {
+  0%, 100% { transform: translate3d(-12%, -8%, 0) scale(1); }
+  50%      { transform: translate3d(10%, 8%, 0) scale(1.18); }
+}
+@keyframes nd-orb-drift-2 {
+  0%, 100% { transform: translate3d(8%, 12%, 0) scale(1.05); }
+  50%      { transform: translate3d(-10%, -6%, 0) scale(0.92); }
+}
+@keyframes nd-orb-drift-3 {
+  0%, 100% { transform: translate3d(0%, 0%, 0) scale(1); }
+  50%      { transform: translate3d(-6%, 14%, 0) scale(1.12); }
+}
+
+.nd-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  pointer-events: none;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+.nd-orb--a {
+  width: clamp(220px, 38vw, 480px);
+  height: clamp(220px, 38vw, 480px);
+  top: -10%;
+  left: -8%;
+  background: radial-gradient(circle at 35% 35%, rgba(77, 143, 133, 0.55), rgba(15, 37, 41, 0) 65%);
+  animation: nd-orb-drift-1 18s ease-in-out infinite;
+}
+.nd-orb--b {
+  width: clamp(200px, 34vw, 440px);
+  height: clamp(200px, 34vw, 440px);
+  bottom: -10%;
+  right: -4%;
+  background: radial-gradient(circle at 50% 50%, rgba(156, 201, 194, 0.45), rgba(116, 173, 163, 0) 60%);
+  animation: nd-orb-drift-2 22s ease-in-out infinite;
+  animation-delay: -6s;
+}
+.nd-orb--c {
+  width: clamp(160px, 28vw, 360px);
+  height: clamp(160px, 28vw, 360px);
+  top: 28%;
+  left: 38%;
+  background: radial-gradient(circle at 50% 50%, rgba(31, 90, 107, 0.45), rgba(15, 37, 41, 0) 65%);
+  animation: nd-orb-drift-3 26s ease-in-out infinite;
+  animation-delay: -11s;
+}
+
+/* Grain texture très léger */
+.nd-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+}
+
+/* Reveal-on-scroll — déclenché via .is-visible */
+.nd-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.nd-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.nd-reveal-d1 { transition-delay: 0.08s; }
+.nd-reveal-d2 { transition-delay: 0.18s; }
+.nd-reveal-d3 { transition-delay: 0.28s; }
+.nd-reveal-d4 { transition-delay: 0.38s; }
+.nd-reveal-d5 { transition-delay: 0.48s; }
+
+/* Shine sweep sur les visuels au survol */
+@keyframes nd-shine-sweep {
+  0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  18%  { opacity: 0.9; }
+  100% { transform: translateX(160%) skewX(-18deg); opacity: 0; }
+}
+.nd-shine {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.nd-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 55%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.42) 50%,
+    transparent 100%
+  );
+  transform: translateX(-120%) skewX(-18deg);
+}
+.group:hover .nd-shine::after,
+.nd-shine-host:hover .nd-shine::after {
+  animation: nd-shine-sweep 1.05s ease-out;
+}
+
+/* Léger « lift » des cartes au survol */
+.nd-card-lift {
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.1),
+              box-shadow 0.45s ease,
+              border-color 0.3s ease;
+}
+.nd-card-lift:hover {
+  transform: translateY(-6px);
+}
+
+/* Bouton scroll-to-top */
+@keyframes nd-fab-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.nd-fab {
+  animation: nd-fab-in 0.35s ease-out both;
+}
+
+/* Hover « halo doux » sur les boutons primaires */
+.nd-glow-hover {
+  position: relative;
+  isolation: isolate;
+}
+.nd-glow-hover::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 30% 20%, rgba(116, 173, 163, 0.55), transparent 60%),
+              radial-gradient(circle at 80% 80%, rgba(31, 90, 107, 0.55), transparent 60%);
+  filter: blur(14px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+.nd-glow-hover:hover::after {
+  opacity: 0.85;
+}
+
+/* Underline animé sur les liens du Navbar */
+.nd-nav-link {
+  position: relative;
+}
+.nd-nav-link::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, rgba(31, 90, 107, 0), rgba(31, 90, 107, 0.7), rgba(31, 90, 107, 0));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nd-nav-link:hover::after,
+.nd-nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Accessibilité : désactive les animations lourdes */
+@media (prefers-reduced-motion: reduce) {
+  .nd-hero-rise,
+  .nd-orb,
+  .nd-fab {
+    animation: none !important;
+  }
+  .nd-reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .nd-shine::after {
+    display: none;
+  }
 }
