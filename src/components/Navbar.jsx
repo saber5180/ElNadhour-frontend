@@ -7,6 +7,7 @@ import api from '../services/api';
 const NAV_LINKS = [
   { to: '/', label: 'Accueil', end: true },
   { to: '/carte', label: 'Notre carte' },
+  { to: '/ambiance', label: 'Ambiance' },
 ];
 
 const Navbar = () => {
@@ -14,7 +15,6 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
-  /** Indicateur LIVE temps réel (discret) — n'affiche le pill que si un live est actif */
   const { data: liveStatus } = useQuery(
     'navbar-live-status',
     () => api.get('/live/status').then((r) => r.data),
@@ -41,14 +41,12 @@ const Navbar = () => {
           : 'border-transparent bg-white/80'
       }`}
     >
-      {/* Filet doré/menthe sous la nav quand au repos */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cafe-300/60 to-transparent"
         aria-hidden
       />
 
       <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-3 sm:gap-3 sm:px-6 sm:py-3.5 lg:px-8">
-        {/* Logo + nom (nom toujours visible mobile — xs: n’existait pas dans Tailwind, d’où le bug) */}
         <Link
           to="/"
           className="group flex min-w-0 shrink items-center gap-2.5 text-cafe-900 transition-colors hover:text-cafe-700 sm:gap-3"
@@ -74,8 +72,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Liens desktop */}
-        <ul className="ml-4 hidden items-center gap-1 md:ml-6 md:flex">
+        <ul className="ml-2 hidden items-center gap-1 md:ml-4 md:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.to}>
               <NavLink
@@ -97,7 +94,6 @@ const Navbar = () => {
 
         <div className="flex-1" />
 
-        {/* Actions à droite — « En direct » visible dès mobile dans la barre */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {isLive && (
             <Link
@@ -109,24 +105,24 @@ const Navbar = () => {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-50" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
               </span>
-              <Radio className="h-3 w-3 shrink-0 sm:hidden" aria-hidden />
-              <span className="hidden sm:inline">En direct</span>
-              <span className="sm:hidden">Direct</span>
+              <Radio className="h-3 w-3 shrink-0 md:hidden" aria-hidden />
+              <span className="hidden md:inline">En direct</span>
+              <span className="md:hidden">Direct</span>
             </Link>
           )}
 
-          <a
-            href="tel:+33123456789"
-            className="hidden items-center gap-1.5 rounded-full border border-cafe-700 bg-cafe-700 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-cafe-800 hover:shadow-md sm:inline-flex md:text-sm"
+          <Link
+            to="/reservation"
+            className="hidden shrink-0 items-center gap-1.5 rounded-full border border-cafe-700 bg-cafe-700 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-cafe-800 hover:shadow-md md:inline-flex"
           >
             <Phone className="h-3.5 w-3.5" />
             Réserver
-          </a>
+          </Link>
 
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-cafe-200 bg-white text-cafe-800 transition-colors hover:bg-cafe-50 md:hidden"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cafe-200 bg-white text-cafe-800 transition-colors hover:bg-cafe-50 md:hidden"
             aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={mobileOpen}
           >
@@ -135,7 +131,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Drawer mobile */}
       {mobileOpen && (
         <div className="border-t border-cafe-100 bg-white md:hidden">
           <div className="mx-auto max-w-7xl px-4 py-3">
@@ -157,23 +152,14 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               ))}
-              {isLive && (
-                <li>
-                  <Link
-                    to="/en-direct"
-                    className="flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2.5 text-sm font-bold text-red-700"
-                  >
-                    <Radio className="h-4 w-4" /> En direct
-                  </Link>
-                </li>
-              )}
-              <li>
-                <a
-                  href="tel:+33123456789"
-                  className="mt-1 flex items-center justify-center gap-2 rounded-xl bg-cafe-700 px-3 py-2.5 text-sm font-semibold text-white shadow-sm shadow-cafe-900/20"
+              <li className="pt-2">
+                <Link
+                  to="/reservation"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-cafe-700 px-3 py-3 text-sm font-semibold text-white shadow-sm shadow-cafe-900/20"
                 >
                   <Phone className="h-4 w-4" /> Réserver
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

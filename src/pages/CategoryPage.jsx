@@ -195,9 +195,9 @@ const CategoryPage = () => {
               Venez nous rendre visite pour déguster nos spécialités fraîchement préparées.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="tel:+33123456789" className="btn-primary">
-                Réserver par téléphone
-              </a>
+              <Link to="/reservation" className="btn-primary">
+                Réserver une table
+              </Link>
               <Link to="/carte" className="btn-secondary">
                 Voir tout le menu
               </Link>

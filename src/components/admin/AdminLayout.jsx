@@ -9,17 +9,25 @@ import {
   X,
   ExternalLink,
   Image,
+  Sparkles,
+  CalendarCheck,
+  Bell,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useAdminReservationAlerts } from '../../hooks/useAdminReservationAlerts.jsx';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
 
+  const { pendingCount } = useAdminReservationAlerts();
+
   const navigation = [
     { name: 'Tableau de bord', href: '/admin', icon: LayoutDashboard },
+    { name: 'Réservations', href: '/admin/reservations', icon: CalendarCheck, badge: pendingCount },
     { name: 'Photos accueil', href: '/admin/medias-accueil', icon: Image },
+    { name: 'Ambiance', href: '/admin/ambiance', icon: Sparkles },
     { name: 'Catégories', href: '/admin/categories', icon: FolderOpen },
     { name: 'Articles du menu', href: '/admin/articles', icon: Utensils },
   ];
@@ -84,7 +92,16 @@ const AdminLayout = () => {
                   }`}
                 >
                   <item.icon className={`h-5 w-5 shrink-0 ${active ? 'text-cafe-100' : 'text-cafe-600'}`} />
-                  {item.name}
+                  <span className="flex-1">{item.name}</span>
+                  {item.badge > 0 && (
+                    <span
+                      className={`flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-bold ${
+                        active ? 'bg-white text-cafe-700' : 'bg-red-500 text-white'
+                      }`}
+                    >
+                      {item.badge > 9 ? '9+' : item.badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}
@@ -129,6 +146,15 @@ const AdminLayout = () => {
               <Menu className="h-6 w-6" />
             </button>
             <div className="hidden flex-1 lg:block" />
+            {pendingCount > 0 && (
+              <Link
+                to="/admin/reservations"
+                className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-100 sm:text-sm"
+              >
+                <Bell className="h-4 w-4 animate-pulse" />
+                {pendingCount} en attente
+              </Link>
+            )}
             <p className="text-xs font-medium text-cafe-600 sm:text-sm">
               {new Date().toLocaleDateString('fr-FR', {
                 weekday: 'long',

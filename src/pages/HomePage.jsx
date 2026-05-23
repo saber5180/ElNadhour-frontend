@@ -19,6 +19,7 @@ import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import HeroBackground from '../components/HeroBackground';
 import { mediaUrl } from '../utils/mediaUrl';
+import { RESTAURANT_PHONE_TEL } from '../config/contact';
 
 const HIGHLIGHTS = [
   { icon: Coffee, title: 'Café artisanal', subtitle: 'Grains sélectionnés' },
@@ -456,18 +457,19 @@ const HomePage = () => {
             Une équipe à votre écoute, du lundi au dimanche.
           </p>
           <div className="nd-reveal nd-reveal-d2 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row md:gap-6">
-            <a
-              href="tel:+33123456789"
+            <Link
+              to="/reservation"
               className="nd-glow-hover inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-8 py-5 text-lg font-bold text-cafe-900 shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl sm:w-auto md:px-10"
             >
-              <Phone className="h-5 w-5" />
-              Appeler maintenant
-            </a>
+              <CalendarDays className="h-5 w-5" />
+              Réserver en ligne
+            </Link>
             <a
-              href="mailto:contact@elnadhour.com"
+              href={`tel:${RESTAURANT_PHONE_TEL}`}
               className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-8 py-5 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/20 sm:w-auto md:px-10"
             >
-              Nous écrire
+              <Phone className="h-5 w-5" />
+              Appeler
             </a>
           </div>
         </div>

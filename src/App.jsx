@@ -14,6 +14,8 @@ import MenuPage from './pages/MenuPage';
 import CategoryPage from './pages/CategoryPage';
 import SimpleMenuPage from './pages/SimpleMenuPage';
 import LiveStreamPage from './pages/LiveStreamPage';
+import AmbiencePage from './pages/AmbiencePage';
+import ReservationPage from './pages/ReservationPage';
 
 // Admin components
 import AdminLayout from './components/admin/AdminLayout';
@@ -22,6 +24,8 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import CategoriesManager from './pages/admin/CategoriesManager';
 import MenuItemsManager from './pages/admin/MenuItemsManager';
 import HeroImagesManager from './pages/admin/HeroImagesManager';
+import AmbienceManager from './pages/admin/AmbienceManager';
+import ReservationsManager from './pages/admin/ReservationsManager';
 
 // Loading component
 import LoadingSpinner from './components/LoadingSpinner';
@@ -49,6 +53,8 @@ function App() {
         <Route path="simple-menu" element={<Navigate to="/carte" replace />} />
         <Route path="categorie/:id" element={<CategoryPage />} />
         <Route path="category/:id" element={<LegacyCategoryRedirect />} />
+        <Route path="ambiance" element={<AmbiencePage />} />
+        <Route path="reservation" element={<ReservationPage />} />
         <Route path="en-direct" element={<LiveStreamPage />} />
         <Route path="live" element={<Navigate to="/en-direct" replace />} />
       </Route>
@@ -67,6 +73,8 @@ function App() {
         <Route path="menu-items" element={<Navigate to="/admin/articles" replace />} />
         <Route path="medias-accueil" element={<HeroImagesManager />} />
         <Route path="hero-images" element={<Navigate to="/admin/medias-accueil" replace />} />
+        <Route path="ambiance" element={<AmbienceManager />} />
+        <Route path="reservations" element={<ReservationsManager />} />
       </Route>
 
       {/* Catch all route */}
